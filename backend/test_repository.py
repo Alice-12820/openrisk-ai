@@ -1,5 +1,5 @@
 from ingestion.github_parser import clone_repository, find_solidity_files
-from analysis.solidity_parser import SolidityParser
+from analysis.analyzer import analyze_contract
 
 repo = clone_repository(
     "https://github.com/Uniswap/v4-core"
@@ -7,9 +7,9 @@ repo = clone_repository(
 
 files = find_solidity_files(repo)
 
-parser = SolidityParser(files[0])
+results = []
 
-functions = parser.extract_functions()
+for file in files:
+    results.append(analyze_contract(file))
 
-for function in functions:
-    print(function)
+print(results)

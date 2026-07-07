@@ -1,5 +1,6 @@
 from ingestion.github_parser import clone_repository, find_solidity_files
 from analysis.solidity_parser import SolidityParser
+from analysis.security_analyzer import SecurityAnalyzer
 
 repo = clone_repository(
     "https://github.com/Uniswap/v4-core"
@@ -12,4 +13,13 @@ parser = SolidityParser(files[0])
 functions = parser.extract_functions()
 
 for function in functions:
-    print(function)
+
+    findings = SecurityAnalyzer.analyze_function(function)
+
+    if findings:
+
+        print(function.name)
+
+        print(findings)
+
+        print("-" * 40)
