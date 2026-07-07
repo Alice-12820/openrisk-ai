@@ -12,4 +12,6 @@ results = []
 for file in files:
     results.append(analyze_contract(file))
 
-print(results)
+from pprint import pprint
+
+pprint(results)
