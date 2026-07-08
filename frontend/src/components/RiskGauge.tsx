@@ -1,3 +1,10 @@
+import {
+    CircularProgressbar,
+    buildStyles,
+} from "react-circular-progressbar";
+
+import "react-circular-progressbar/dist/styles.css";
+
 type Props = {
     score: number;
     level: string;
@@ -8,32 +15,51 @@ export default function RiskGauge({
     level,
 }: Props) {
 
-    let color = "text-green-400";
-
-    if (level === "Medium")
-        color = "text-yellow-400";
-
-    if (level === "High")
-        color = "text-orange-400";
-
-    if (level === "Critical")
-        color = "text-red-500";
+    const color =
+        level === "Critical"
+            ? "#ef4444"
+            : level === "High"
+            ? "#f97316"
+            : level === "Medium"
+            ? "#eab308"
+            : "#22c55e";
 
     return (
-        <div className="rounded-xl bg-slate-900 p-8 shadow-lg text-center">
 
-            <p className="text-slate-400">
-                Risk Score
-            </p>
+        <div className="rounded-2xl border border-slate-800 bg-slate-900 p-8 shadow-xl">
 
-            <h1 className={`mt-4 text-6xl font-bold ${color}`}>
-                {score}
-            </h1>
+            <h2 className="mb-8 text-2xl font-bold">
 
-            <p className={`mt-2 text-2xl font-semibold ${color}`}>
+                Overall Repository Risk
+
+            </h2>
+
+            <div className="mx-auto h-64 w-64">
+
+                <CircularProgressbar
+                    value={score}
+                    maxValue={1000}
+                    text={`${score}`}
+                    styles={buildStyles({
+                        pathColor: color,
+                        textColor: "#ffffff",
+                        trailColor: "#1e293b",
+                    })}
+                />
+
+            </div>
+
+            <h3
+                className="mt-8 text-center text-3xl font-bold"
+                style={{
+                    color,
+                }}
+            >
                 {level}
-            </p>
+            </h3>
 
         </div>
+
     );
+
 }

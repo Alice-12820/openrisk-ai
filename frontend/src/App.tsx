@@ -2,10 +2,11 @@ import { useState } from "react";
 
 import Header from "./components/Header";
 import SearchBar from "./components/SearchBar";
+import RepositoryCard from "./components/RepositoryCard";
 import RiskGauge from "./components/RiskGauge";
 import StatsCard from "./components/StatsCard";
+
 import ReportCard from "./components/ReportCard";
-import RepositoryCard from "./components/RepositoryCard";
 import LoadingOverlay from "./components/LoadingOverlay";
 
 import api from "./services/api";
@@ -13,52 +14,40 @@ import api from "./services/api";
 import type { AnalysisResponse } from "./types/report";
 
 function App() {
-
-    const [loading, setLoading] =
-        useState(false);
+    const [loading, setLoading] = useState(false);
 
     const [report, setReport] =
         useState<AnalysisResponse | null>(null);
 
     async function analyze(url: string) {
-
         if (!url) return;
 
         setLoading(true);
 
         try {
-
-            const response =
-                await api.post(
-                    "/analyze",
-                    {
-                        github_url: url,
-                    }
-                );
+            const response = await api.post(
+                "/analyze",
+                {
+                    github_url: url,
+                }
+            );
 
             setReport(response.data);
+            console.log(response.data.analysis.contracts);
 
         } catch (err) {
-
             console.error(err);
-
             alert("Analysis failed.");
 
         } finally {
-
             setLoading(false);
-
         }
-
     }
 
     return (
-
         <div className="min-h-screen bg-slate-950 text-white">
 
-            <LoadingOverlay
-                visible={loading}
-            />
+            <LoadingOverlay visible={loading} />
 
             <div className="mx-auto max-w-7xl p-10">
 
@@ -120,35 +109,28 @@ function App() {
 
                         </div>
 
+                        
+
                         <ReportCard
                             title="Executive Summary"
                         >
-
                             <p className="leading-8 text-slate-300">
-
                                 {
-                                    report.ai_report.executive_summary
+                                    report.ai_report
+                                        .executive_summary
                                 }
-
                             </p>
-
                         </ReportCard>
 
                         <ReportCard
                             title="Priority Review Areas"
                         >
-
                             <ul className="space-y-3">
 
                                 {report.ai_report.priority_review_areas.map(
-                                    (
-                                        item,
-                                        index
-                                    ) => (
+                                    (item, index) => (
 
-                                        <li
-                                            key={index}
-                                        >
+                                        <li key={index}>
                                             ✅ {item}
                                         </li>
 
@@ -156,24 +138,17 @@ function App() {
                                 )}
 
                             </ul>
-
                         </ReportCard>
 
                         <ReportCard
                             title="Recommended Next Steps"
                         >
-
                             <ul className="space-y-3">
 
                                 {report.ai_report.recommended_next_steps.map(
-                                    (
-                                        item,
-                                        index
-                                    ) => (
+                                    (item, index) => (
 
-                                        <li
-                                            key={index}
-                                        >
+                                        <li key={index}>
                                             🚀 {item}
                                         </li>
 
@@ -181,7 +156,6 @@ function App() {
                                 )}
 
                             </ul>
-
                         </ReportCard>
 
                     </div>
@@ -191,9 +165,7 @@ function App() {
             </div>
 
         </div>
-
     );
-
 }
 
 export default App;
