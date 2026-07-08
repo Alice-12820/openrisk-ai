@@ -18,10 +18,14 @@ export interface AIReport {
     recommended_next_steps: string[];
 }
 
-export interface AnalysisResponse {
+export interface RepositoryAnalysis {
     repository: string;
     summary: Summary;
     risk: Risk;
     contracts: any[];
+}
+
+export interface AnalysisResponse {
+    analysis: RepositoryAnalysis;
     ai_report: AIReport;
 }
